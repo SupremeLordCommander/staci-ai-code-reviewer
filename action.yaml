@@ -1,0 +1,7 @@
+name: 'OpenAI Code Review Action'
+description: 'This action reviews code using OpenAI API'
+runs:
+  using: 'composite'
+  steps:
+    - run: python scripts/code_review.py
+      shell: bash
