@@ -1,7 +1,29 @@
-name: 'OpenAI Code Review Action'
-description: 'This action reviews code using OpenAI API'
+---
+name: 'Staci AI Code Review'
+description: 'This action prepares a code review using Staci AI'
 runs:
   using: 'composite'
   steps:
-    - run: python scripts/code_review.py
-      shell: bash
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags.
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # Replace with your desired Python version
+          # cache: 'pip' #
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          pip install --no-cache-dir -r requirements.txt
+
+      - name: Run script
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python python src/code_review.py
